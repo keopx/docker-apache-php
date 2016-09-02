@@ -36,8 +36,9 @@ RUN apt-get -yqq install \
   rsync \
   vim \
   openssh-client \
-  git
-  
+  git \
+  bash-completion
+
 # Configure Dotdeb sources
 RUN \
   wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - && \
@@ -63,9 +64,6 @@ RUN apt-get -yqq install \
 
 # Install Apache web server
 RUN apt-get -yqq install apache2-mpm-prefork
-
-# Install ssmtp MTA
-RUN apt-get -yqq install ssmtp
 
 # Install memcached service
 # RUN apt-get -yqq install memcached
@@ -139,11 +137,17 @@ RUN drupal init --override
 ### DRUPAL CONSOLE Faster way:
 #RUN composer global require drupal/console:@stable
 
+# Bash setup.
+RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc
+RUN echo ". /vendor/drush/drush/drush.complete.sh" >> ~/.bashrc
+RUN echo "alias ll='ls -lahs'" >> ~/.bashrc
+RUN rm /usr/local/bin/drush.bat /usr/local/bin/drush.complete.sh /usr/local/bin/drush.php
+
 #
 # Step 3: Clean the system
 #
 
-# Cleanup some things
+# Cleanup some things.
 RUN apt-get -q autoclean && \
   rm -rf /var/lib/apt/lists/*
 
