@@ -139,9 +139,7 @@ RUN drupal init --override
 
 # Bash setup.
 RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc
-#RUN echo ". /vendor/drush/drush/drush.complete.sh" >> ~/.bashrc
 RUN echo "alias ll='ls -lahs'" >> ~/.bashrc
-#RUN rm /usr/local/bin/drush.bat /usr/local/bin/drush.complete.sh /usr/local/bin/drush.php
 
 #
 # Step 3: Clean the system
