@@ -41,7 +41,7 @@ RUN apt-get -yqq install \
   libssh2-php
 
 # Install PHP7 with Xdebug (dev environment).
-RUN sudo apt-get -yqq install \
+RUN apt-get -yqq install \
   php5			\
   php5-curl 		\
   php5-dev 		\
