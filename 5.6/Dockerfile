@@ -44,12 +44,17 @@ RUN apt-get -yqq install \
   php5			\
   php5-curl 		\
   php5-dev 		\
+  php-dom		\
   php5-gd 		\
   php5-intl 		\
   php5-json 		\
+  php-mbstring		\
   php5-mcrypt		\
   php5-mysql		\
   php5-twig		\
+  php5-ssh2		\
+  php-xml		\
+  php-zip		\
   php5-apcu		\
   php5-memcached 	\
   php5-xdebug		\
