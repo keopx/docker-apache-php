@@ -68,11 +68,12 @@ RUN apt-get -yqq install \
   php7.0-xdebug		\
   libapache2-mod-php7.0
 
-# Install Apache web server
-RUN apt-get -yqq install apache2-mpm-prefork
+# Install SMTP.
+RUN apt-get install -y ssmtp && \
+  echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 
-# Install memcached service
-# RUN apt-get -yqq install memcached
+# Install Apache web server.
+RUN apt-get -yqq install apache2-mpm-prefork
 
 #
 # Step 2: Configuration
@@ -118,7 +119,7 @@ RUN a2enmod		\
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
 ### Install DRUSH (latest stable) ###
-# Run this in your terminal to get the latest project version:
+# Run this in your terminal to get the latest DRUSH project version:
 RUN curl http://files.drush.org/drush.phar -L -o drush.phar
 # Accessing from anywhere on your system:
 RUN mv drush.phar /usr/local/bin/drush
@@ -164,6 +165,9 @@ WORKDIR /var/www
 
 # Volume for Apache2 data
 VOLUME /var/www
+
+# Special permissions.
+RUN usermod -u 1000 www-data && usermod -a -G users www-data
 
 COPY scripts/apache2-foreground /usr/bin/
 

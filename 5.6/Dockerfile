@@ -58,11 +58,12 @@ RUN apt-get -yqq install \
   php5-xhprof		\
   libapache2-mod-php5
 
-# Install Apache web server
-RUN apt-get -yqq install apache2-mpm-prefork
+# Install SMTP.
+RUN apt-get install -y ssmtp && \
+  echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 
-# Install memcached service
-# RUN apt-get -yqq install memcached
+# Install Apache web server.
+RUN apt-get -yqq install apache2-mpm-prefork
 
 #
 # Step 2: Configuration
@@ -147,6 +148,9 @@ WORKDIR /var/www
 
 # Volume for Apache2 data
 VOLUME /var/www
+
+# Special permissions.
+RUN usermod -u 1000 www-data && usermod -a -G users www-data
 
 COPY scripts/apache2-foreground /usr/bin/
 
