@@ -16,10 +16,9 @@ RUN \
   echo "deb http://ftp.de.debian.org/debian/ jessie main non-free contrib\n" > /etc/apt/sources.list && \
   echo "deb-src http://ftp.de.debian.org/debian/ jessie main non-free contrib\n" >> /etc/apt/sources.list && \
   echo "deb http://security.debian.org/ jessie/updates main contrib non-free\n" >> /etc/apt/sources.list && \
-  echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list
-  
-# Update repositories cache and distribution
-RUN apt-get -qq update && apt-get -qqy upgrade
+  echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list && \
+  # Update repositories cache and distribution
+  apt-get -qq update && apt-get -qqy upgrade
 
 # Install some basic tools needed for deployment
 RUN apt-get -yqq install \
@@ -40,7 +39,7 @@ RUN apt-get -yqq install \
   bash-completion \
   libssh2-php
 
-# Install PHP7 with Xdebug (dev environment).
+# Install PHP5.6 with Xdebug (dev environment).
 RUN apt-get -yqq install \
   php5			\
   php5-curl 		\
@@ -75,9 +74,6 @@ RUN php5dismod xdebug
 # Remove all sites enabled
 RUN rm /etc/apache2/sites-enabled/*
 
-# Disable default ssl site
-RUN a2dissite default-ssl
-
 # Configure needed apache modules and disable default site
 RUN a2enmod		\
   access_compat		\
@@ -107,30 +103,30 @@ RUN a2enmod		\
   && a2dismod cgi
   
 # Install composer (latest version)
-RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php && \
+  mv composer.phar /usr/local/bin/composer
 
 ### Install DRUSH (latest stable) ###
 # Create and/or navigate to a path for the single Composer Drush install.
-RUN mkdir --parents /opt/drush-7.x && cd /opt/drush-7.x
-# Initialise a new Composer project that requires Drush.
-RUN composer init --require=drush/drush:7.* -n
-# Configure the path Composer should use for the Drush vendor binaries.
-RUN composer config bin-dir /usr/local/bin
-# Install Drush.
-RUN composer install
-
-# Drush vitamin. 
-# See: https://www.drupal.org/project/registry_rebuild.
-RUN drush dl registry_rebuild 
-# See: https://www.drupal.org/project/updatepath.
-RUN drush dl --destination=$HOME/.drush updatepath -y && drush cache-clear drush
+RUN mkdir --parents /opt/drush-7.x && cd /opt/drush-7.x && \
+  # Initialise a new Composer project that requires Drush.
+  composer init --require=drush/drush:7.* -n && \
+  # Configure the path Composer should use for the Drush vendor binaries.
+  composer config bin-dir /usr/local/bin && \
+  # Install Drush.
+  composer install && \
+  # Drush vitamin. 
+  # See: https://www.drupal.org/project/registry_rebuild.
+  drush dl registry_rebuild && \
+  # See: https://www.drupal.org/project/updatepath.
+  drush dl --destination=$HOME/.drush updatepath -y && drush cache-clear drush
 
 
 # Bash setup.
-RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc
-RUN echo ". /vendor/drush/drush/drush.complete.sh" >> ~/.bashrc
-RUN echo "alias ll='ls -lahs'" >> ~/.bashrc
-RUN rm /usr/local/bin/drush.bat /usr/local/bin/drush.complete.sh /usr/local/bin/drush.php
+RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc && \
+  echo ". /vendor/drush/drush/drush.complete.sh" >> ~/.bashrc && \
+  echo "alias ll='ls -lahs'" >> ~/.bashrc && \
+  rm /usr/local/bin/drush.bat /usr/local/bin/drush.complete.sh /usr/local/bin/drush.php
 
 #
 # Step 3: Clean the system

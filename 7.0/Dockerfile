@@ -16,10 +16,9 @@ RUN \
   echo "deb http://ftp.de.debian.org/debian/ jessie main non-free contrib\n" > /etc/apt/sources.list && \
   echo "deb-src http://ftp.de.debian.org/debian/ jessie main non-free contrib\n" >> /etc/apt/sources.list && \
   echo "deb http://security.debian.org/ jessie/updates main contrib non-free\n" >> /etc/apt/sources.list && \
-  echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list
-  
-# Update repositories cache and distribution
-RUN apt-get -qq update && apt-get -qqy upgrade
+  echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list && \
+  # Update repositories cache and distribution
+  apt-get -qq update && apt-get -qqy upgrade
 
 # Install some basic tools needed for deployment
 RUN apt-get -yqq install \
@@ -45,8 +44,7 @@ RUN \
   wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - && \
   echo "deb http://packages.dotdeb.org jessie all\n" > /etc/apt/sources.list.d/dotdeb.list && \
   echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.list && \
-  apt-get -qq update
-
+  apt-get -qq update && apt-get -qqy upgrade
 
 # Install PHP7 with Xdebug (dev environment)
 RUN apt-get -yqq install \
@@ -85,9 +83,6 @@ RUN phpdismod xdebug
 # Remove all sites enabled
 RUN rm /etc/apache2/sites-enabled/*
 
-# Disable default ssl site
-RUN a2dissite default-ssl
-
 # Configure needed apache modules and disable default site
 RUN a2enmod		\
   access_compat		\
@@ -105,7 +100,7 @@ RUN a2enmod		\
   env 			\
   expires 		\
   filter 		\
-  headers 		\
+  headers		\
   mime 			\
   negotiation 		\
   php7.0 		\
@@ -117,37 +112,31 @@ RUN a2enmod		\
   && a2dismod cgi
   
 # Install composer (latest version)
-RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php && \
+  mv composer.phar /usr/local/bin/composer
 
 ### Install DRUSH (latest stable) ###
 # Run this in your terminal to get the latest DRUSH project version:
-RUN curl http://files.drush.org/drush.phar -L -o drush.phar
-# Accessing from anywhere on your system:
-RUN mv drush.phar /usr/local/bin/drush
-# Apply executable permissions on the downloaded file:
-RUN chmod +x /usr/local/bin/drush
-# Copy configuration files to user home directory:
-RUN drush init -y
-
-### DRUSH Faster way:
-#RUN composer global require drush/drush:@stable
+RUN curl http://files.drush.org/drush.phar -L -o drush.phar && \
+  # Accessing from anywhere on your system:
+  mv drush.phar /usr/local/bin/drush && \
+  # Apply executable permissions on the downloaded file:
+  chmod +x /usr/local/bin/drush && \
+  # Copy configuration files to user home directory:
+  drush init -y
 
 ### Install DRUPAL CONSOLE (latest version) ###
 # Run this in your terminal to get the latest project version:
-RUN curl https://drupalconsole.com/installer -L -o drupal.phar
-# Accessing from anywhere on your system:
-RUN mv drupal.phar /usr/local/bin/drupal
-# Apply executable permissions on the downloaded file:
-RUN chmod +x /usr/local/bin/drupal
-# Copy configuration files to user home directory:
-RUN drupal init --override
-
-### DRUPAL CONSOLE Faster way:
-#RUN composer global require drupal/console:@stable
+RUN curl https://drupalconsole.com/installer -L -o drupal.phar && \
+  # Accessing from anywhere on your system:
+  mv drupal.phar /usr/local/bin/drupal && \
+  # Apply executable permissions on the downloaded file:
+  chmod +x /usr/local/bin/drupal && \
+  # Copy configuration files to user home directory:
+  drupal init --override
 
 # Bash setup.
-RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc
-RUN echo "alias ll='ls -lahs'" >> ~/.bashrc
+RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc && echo "alias ll='ls -lahs'" >> ~/.bashrc
 
 #
 # Step 3: Clean the system
