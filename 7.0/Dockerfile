@@ -62,9 +62,23 @@ RUN apt-get -yqq install \
   php7.0-xml		\
   php7.0-zip		\
   php7.0-apcu		\
+  php7.0-opcache	\
   php7.0-memcached 	\
+  php7.0-redis		\
   php7.0-xdebug		\
   libapache2-mod-php7.0
+
+# Install manually xhprof
+RUN \
+  cd /tmp && \
+  wget https://github.com/RustJason/xhprof/archive/php7.zip && \
+  unzip php7.zip && \
+  cd xhprof-php7/extension && \
+  phpize7.0  && \
+  ./configure --with-php-config=/usr/bin/php-config7.0  && \
+  make && make install && \
+  echo "extension=xhprof.so" > /etc/php/7.0/mods-available/xhprof.ini && \
+  phpenmod xhprof
 
 # Install SMTP.
 RUN apt-get install -y ssmtp && \
