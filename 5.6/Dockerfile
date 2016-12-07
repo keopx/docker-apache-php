@@ -53,6 +53,7 @@ RUN apt-get -yqq install \
   php5-ssh2		\
   php5-apcu		\
   php5-memcached 	\
+  php5-redis		\
   php5-xdebug		\
   php5-xhprof		\
   libapache2-mod-php5
