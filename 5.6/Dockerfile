@@ -58,6 +58,9 @@ RUN apt-get -yqq install \
   php5-xhprof		\
   libapache2-mod-php5
 
+# Configuran xhprof manually
+RUN echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php5/mods-available/xhprof.ini
+
 # Install SMTP.
 RUN apt-get install -y ssmtp && \
   echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
