@@ -58,9 +58,6 @@ RUN apt-get -yqq install \
   php5-xhprof		\
   libapache2-mod-php5
 
-# Configuran xhprof manually
-RUN echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php5/mods-available/xhprof.ini
-
 # Install SMTP.
 RUN apt-get install -y ssmtp && \
   echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
@@ -72,8 +69,8 @@ RUN apt-get -yqq install apache2-mpm-prefork
 # Step 2: Configuration
 #
 
-# Disable by default xdebug. Use docker-compose to add file.
-RUN php5dismod xdebug
+# Disable by default xdebug and xhprof. Use docker-compose.yml to add file.
+RUN php5dismod xdebug xhprof
 
 # Remove all sites enabled
 RUN rm /etc/apache2/sites-enabled/*

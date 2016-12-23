@@ -71,7 +71,6 @@ RUN apt-get -yqq install \
   libapache2-mod-php7.1
 
 # Install manually xhprof
- 
 RUN \
   cd /tmp && \
   wget https://github.com/Yaoguais/phpng-xhprof/archive/master.zip && \
@@ -82,10 +81,9 @@ RUN \
   make && make install && \
   mv /usr/lib/php/20160303/phpng_xhprof.so /usr/lib/php/20160303/xhprof.so  && \
   echo "extension=xhprof.so" > /etc/php/7.1/mods-available/xhprof.ini && \
-  echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.1/mods-available/xhprof.ini && \
-  phpenmod xhprof
+  echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.1/mods-available/xhprof.ini
 
-# Install SMTP.pecl install xhprof-beta
+# Install SMTP.
 RUN apt-get install -y ssmtp && \
   echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 

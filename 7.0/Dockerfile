@@ -78,8 +78,7 @@ RUN \
   ./configure --with-php-config=/usr/bin/php-config7.0  && \
   make && make install && \
   echo "extension=xhprof.so" > /etc/php/7.0/mods-available/xhprof.ini && \
-  echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.0/mods-available/xhprof.ini && \
-  phpenmod xhprof
+  echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.0/mods-available/xhprof.ini
 
 # Install SMTP.
 RUN apt-get install -y ssmtp && \
