@@ -105,7 +105,9 @@ RUN a2enmod		\
   
 # Install composer (latest version)
 RUN curl -sS https://getcomposer.org/installer | php && \
-  mv composer.phar /usr/local/bin/composer
+  mv composer.phar /usr/local/bin/composer && \
+  # prestissimo to speed up composer
+  composer global require "hirak/prestissimo:^0.3"
 
 ### Install DRUSH (latest stable) ###
 # Create and/or navigate to a path for the single Composer Drush install.
@@ -141,14 +143,14 @@ RUN apt-get -q autoclean && \
 # Step 4: Run
 #
 
+# Create 'me' user like local machime user.
+RUN useradd me && usermod -G www-data -a me
+
 # Working dir
 WORKDIR /var/www
 
 # Volume for Apache2 data
 VOLUME /var/www
-
-# Special permissions.
-RUN usermod -u 1000 www-data && usermod -a -G users www-data
 
 COPY scripts/apache2-foreground /usr/bin/
 
