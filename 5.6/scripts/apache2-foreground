@@ -4,7 +4,7 @@ set -eo pipefail
 rm -f /var/run/apache2/apache2.pid
 
 if [ -n "$PHP_SENDMAIL_PATH" ]; then
-     sed -i 's@^;sendmail_path.*@'"sendmail_path = ${PHP_SENDMAIL_PATH}"'@' /etc/php/7.0/apache2/php.ini
+     sed -i 's@^;sendmail_path.*@'"sendmail_path = ${PHP_SENDMAIL_PATH}"'@' /etc/php5/apache2/php.ini
 fi
 
 if [ -n "$PHP_SENDMAIL_DOMAIN" ]; then
