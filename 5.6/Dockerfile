@@ -9,7 +9,11 @@ MAINTAINER keopx <keopx@keopx.net>
 # Set frontend. We'll clean this later on!
 ENV DEBIAN_FRONTEND noninteractive
 
+# Locale
 ENV LOCALE es_ES.UTF-8
+
+# PHP Timezone
+ENV TZ=Europe/Madrid
 
 # Set repositories
 RUN \
@@ -29,7 +33,7 @@ RUN apt-get -yqq install \
   mysql-client \
   locales \
   curl \
-  wget \  
+  wget \
   unzip \
   patch \
   rsync \
@@ -37,7 +41,15 @@ RUN apt-get -yqq install \
   openssh-client \
   git \
   bash-completion \
-  libssh2-php
+  libssh2-php \
+  locales
+
+# Install locale
+RUN \
+  sed -i -e "s/# $LOCALE/$LOCALE/" /etc/locale.gen && \
+  echo "LANG=$LOCALE">/etc/default/locale && \
+  dpkg-reconfigure --frontend=noninteractive locales && \
+  update-locale LANG=$LOCALE
 
 # Install PHP5.6 with Xdebug (dev environment).
 RUN apt-get -yqq install \
@@ -57,6 +69,13 @@ RUN apt-get -yqq install \
   php5-xdebug		\
   php5-xhprof		\
   libapache2-mod-php5
+
+# PHP Timezone
+RUN \
+  echo $TZ | tee /etc/timezone && \
+  dpkg-reconfigure --frontend noninteractive tzdata && \
+  echo "date.timezone = \"$TZ\";" > /etc/php5/apache2/conf.d/timezone.ini && \
+  echo "date.timezone = \"$TZ\";" > /etc/php5/cli/conf.d/timezone.ini
 
 # Install SMTP.
 RUN apt-get install -y ssmtp && \
@@ -102,7 +121,7 @@ RUN a2enmod		\
   setenvif 		\
   status 		\
   && a2dismod cgi
-  
+
 # Install composer (latest version)
 RUN curl -sS https://getcomposer.org/installer | php && \
   mv composer.phar /usr/local/bin/composer && \
@@ -118,12 +137,11 @@ RUN mkdir --parents /opt/drush-7.x && cd /opt/drush-7.x && \
   composer config bin-dir /usr/local/bin && \
   # Install Drush.
   composer install && \
-  # Drush vitamin. 
+  # Drush vitamin.
   # See: https://www.drupal.org/project/registry_rebuild.
   drush dl registry_rebuild && \
   # See: https://www.drupal.org/project/updatepath.
   drush dl --destination=$HOME/.drush updatepath -y && drush cache-clear drush
-
 
 # Bash setup.
 RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc && \

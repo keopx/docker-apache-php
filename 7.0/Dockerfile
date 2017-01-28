@@ -9,7 +9,11 @@ MAINTAINER keopx <keopx@keopx.net>
 # Set frontend. We'll clean this later on!
 ENV DEBIAN_FRONTEND noninteractive
 
+# Locale
 ENV LOCALE es_ES.UTF-8
+
+# PHP Timezone
+ENV TZ=Europe/Madrid
 
 # Set repositories
 RUN \
@@ -29,7 +33,7 @@ RUN apt-get -yqq install \
   mysql-client \
   locales \
   curl \
-  wget \  
+  wget \
   unzip \
   patch \
   rsync \
@@ -37,7 +41,15 @@ RUN apt-get -yqq install \
   openssh-client \
   git \
   bash-completion \
-  libssh2-php
+  libssh2-php \
+  locales
+
+# Install locale
+RUN \
+  sed -i -e "s/# $LOCALE/$LOCALE/" /etc/locale.gen && \
+  echo "LANG=$LOCALE">/etc/default/locale && \
+  dpkg-reconfigure --frontend=noninteractive locales && \
+  update-locale LANG=$LOCALE
 
 # Configure Dotdeb sources
 RUN \
@@ -67,6 +79,13 @@ RUN apt-get -yqq install \
   php7.0-redis		\
   php7.0-xdebug		\
   libapache2-mod-php7.0
+
+# PHP Timezone
+RUN \
+  echo $TZ | tee /etc/timezone && \
+  dpkg-reconfigure --frontend noninteractive tzdata && \
+  echo "date.timezone = \"$TZ\";" > /etc/php/7.0/apache2/conf.d/timezone.ini && \
+  echo "date.timezone = \"$TZ\";" > /etc/php/7.0/cli/conf.d/timezone.ini
 
 # Install manually xhprof
 RUN \
@@ -124,7 +143,7 @@ RUN a2enmod		\
   setenvif 		\
   status 		\
   && a2dismod cgi
-  
+
 # Install composer (latest version)
 RUN curl -sS https://getcomposer.org/installer | php && \
   mv composer.phar /usr/local/bin/composer && \
