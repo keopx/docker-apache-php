@@ -110,8 +110,8 @@ RUN apt-get -yqq install apache2-mpm-prefork
 # Step 2: Configuration
 #
 
-# Disable by default xdebug. Use docker-compose to add file.
-RUN phpdismod xdebug
+# Disable by default xdebug and xhprof. Use docker-compose.yml to add file.
+RUN phpdismod xdebug xhprof
 
 # Remove all sites enabled
 RUN rm /etc/apache2/sites-enabled/*
@@ -142,7 +142,7 @@ RUN a2enmod		\
   rewrite 		\
   setenvif 		\
   status 		\
-  ssl 		\
+  ssl			\
   && a2dismod cgi
 
 # Install composer (latest version)

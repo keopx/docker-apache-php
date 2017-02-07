@@ -120,7 +120,7 @@ RUN a2enmod		\
   rewrite 		\
   setenvif 		\
   status 		\
-  ssl 		\
+  ssl			\
   && a2dismod cgi
 
 # Install composer (latest version)
