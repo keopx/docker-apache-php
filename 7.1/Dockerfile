@@ -114,7 +114,7 @@ RUN apt-get -yqq install apache2-mpm-prefork
 #
 
 # Disable by default xdebug and xhprof. Use docker-compose.yml to add file.
-RUN phpdismod xdebug xhprof
+RUN phpdismod apcu opcache xdebug xhprof
 
 # Remove all sites enabled
 RUN rm /etc/apache2/sites-enabled/*
