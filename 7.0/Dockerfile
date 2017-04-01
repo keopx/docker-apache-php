@@ -75,6 +75,7 @@ RUN apt-get -yqq install \
   php7.0-zip		\
   php7.0-apcu		\
   php7.0-opcache	\
+  php7.0-memcache 	\
   php7.0-memcached 	\
   php7.0-redis		\
   php7.0-xdebug		\

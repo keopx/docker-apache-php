@@ -64,6 +64,7 @@ RUN apt-get -yqq install \
   php5-twig		\
   php5-ssh2		\
   php5-apcu		\
+  php5-memcache 	\
   php5-memcached 	\
   php5-redis		\
   php5-xdebug		\
