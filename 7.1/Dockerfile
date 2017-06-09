@@ -171,9 +171,7 @@ RUN curl https://drupalconsole.com/installer -L -o drupal.phar && \
   # Accessing from anywhere on your system:
   mv drupal.phar /usr/local/bin/drupal && \
   # Apply executable permissions on the downloaded file:
-  chmod +x /usr/local/bin/drupal && \
-  # Copy configuration files to user home directory:
-  drupal init --override
+  chmod +x /usr/local/bin/drupal
 
 # Bash setup.
 RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc && echo "alias ll='ls -lahs'" >> ~/.bashrc
