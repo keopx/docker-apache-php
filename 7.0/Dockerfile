@@ -50,6 +50,15 @@ RUN \
   dpkg-reconfigure --frontend=noninteractive locales && \
   update-locale LANG=$LOCALE
 
+# Configure Sury sources
+# @see https://www.noobunbox.net/serveur/auto-hebergement/installer-php-7-1-sous-debian-et-ubuntu
+RUN \
+  apt-get -yqq install apt-transport-https lsb-release ca-certificates && \
+  wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
+  echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list && \
+  # Update repositories cache and distribution
+  apt-get -qq update && apt-get -qqy upgrade
+
 # Install PHP7 with Xdebug (dev environment)
 RUN apt-get -yqq install \
   php7.0 		\
@@ -66,7 +75,7 @@ RUN apt-get -yqq install \
   php7.0-ssh2		\
   php7.0-xml		\
   php7.0-zip		\
-  php7.0-solr  		\
+  php7.0-solr		\
   php7.0-apcu		\
   php7.0-opcache	\
   php7.0-memcache 	\
