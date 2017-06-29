@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 MAINTAINER keopx <keopx@keopx.net>
 
@@ -17,10 +17,10 @@ ENV TZ=Europe/Madrid
 
 # Set repositories
 RUN \
-  echo "deb http://ftp.de.debian.org/debian/ jessie main non-free contrib\n" > /etc/apt/sources.list && \
-  echo "deb-src http://ftp.de.debian.org/debian/ jessie main non-free contrib\n" >> /etc/apt/sources.list && \
-  echo "deb http://security.debian.org/ jessie/updates main contrib non-free\n" >> /etc/apt/sources.list && \
-  echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list && \
+  echo "deb http://ftp.de.debian.org/debian/ stretch main non-free contrib\n" > /etc/apt/sources.list && \
+  echo "deb-src http://ftp.de.debian.org/debian/ stretch main non-free contrib\n" >> /etc/apt/sources.list && \
+  echo "deb http://security.debian.org/ stretch/updates main contrib non-free\n" >> /etc/apt/sources.list && \
+  echo "deb-src http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
   # Update repositories cache and distribution
   apt-get -qq update && apt-get -qqy upgrade
 
@@ -41,7 +41,6 @@ RUN apt-get -yqq install \
   openssh-client \
   git \
   bash-completion \
-  libssh2-php \
   locales
 
 # Install locale
@@ -72,9 +71,11 @@ RUN apt-get -yqq install \
   php7.1-mbstring	\
   php7.1-mcrypt 	\
   php7.1-mysql		\
+  php7.1-uploadprogress \
   php7.1-ssh2		\
   php7.1-xml		\
   php7.1-zip		\
+  php7.1-solr		\
   php7.1-apcu		\
   php7.1-opcache	\
   php7.1-memcache 	\
@@ -108,19 +109,20 @@ RUN apt-get install -y ssmtp && \
   echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 
 # Install Apache web server.
-RUN apt-get -yqq install apache2-mpm-prefork
+RUN apt-get -yqq install apache2
 
 #
 # Step 2: Configuration
 #
 
-# Disable by default xdebug and xhprof. Use docker-compose.yml to add file.
+# Disable by default apcu, opcache, xdebug and xhprof. Use docker-compose.yml to add file.
 RUN phpdismod apcu opcache xdebug xhprof
 
 # Remove all sites enabled
 RUN rm /etc/apache2/sites-enabled/*
 
 # Configure needed apache modules and disable default site
+RUN a2dismod   mpm_event  cgi # mpm_worker enabled.
 RUN a2enmod		\
   access_compat		\
   actions		\
@@ -146,8 +148,7 @@ RUN a2enmod		\
   rewrite 		\
   setenvif 		\
   status 		\
-  ssl			\
-  && a2dismod cgi
+  ssl			
 
 # Install composer (latest version)
 RUN curl -sS https://getcomposer.org/installer | php && \
