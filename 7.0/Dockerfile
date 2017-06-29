@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 MAINTAINER keopx <keopx@keopx.net>
 
@@ -17,10 +17,10 @@ ENV TZ=Europe/Madrid
 
 # Set repositories
 RUN \
-  echo "deb http://ftp.de.debian.org/debian/ jessie main non-free contrib\n" > /etc/apt/sources.list && \
-  echo "deb-src http://ftp.de.debian.org/debian/ jessie main non-free contrib\n" >> /etc/apt/sources.list && \
-  echo "deb http://security.debian.org/ jessie/updates main contrib non-free\n" >> /etc/apt/sources.list && \
-  echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list && \
+  echo "deb http://ftp.de.debian.org/debian/ stretch main non-free contrib\n" > /etc/apt/sources.list && \
+  echo "deb-src http://ftp.de.debian.org/debian/ stretch main non-free contrib\n" >> /etc/apt/sources.list && \
+  echo "deb http://security.debian.org/ stretch/updates main contrib non-free\n" >> /etc/apt/sources.list && \
+  echo "deb-src http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
   # Update repositories cache and distribution
   apt-get -qq update && apt-get -qqy upgrade
 
@@ -41,7 +41,6 @@ RUN apt-get -yqq install \
   openssh-client \
   git \
   bash-completion \
-  libssh2-php \
   locales
 
 # Install locale
@@ -50,13 +49,6 @@ RUN \
   echo "LANG=$LOCALE">/etc/default/locale && \
   dpkg-reconfigure --frontend=noninteractive locales && \
   update-locale LANG=$LOCALE
-
-# Configure Dotdeb sources
-RUN \
-  wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - && \
-  echo "deb http://packages.dotdeb.org jessie all\n" > /etc/apt/sources.list.d/dotdeb.list && \
-  echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.list && \
-  apt-get -qq update && apt-get -qqy upgrade
 
 # Install PHP7 with Xdebug (dev environment)
 RUN apt-get -yqq install \
@@ -70,9 +62,11 @@ RUN apt-get -yqq install \
   php7.0-mbstring	\
   php7.0-mcrypt 	\
   php7.0-mysql		\
+  php7.0-uploadprogress \
   php7.0-ssh2		\
   php7.0-xml		\
   php7.0-zip		\
+  php7.0-solr  \
   php7.0-apcu		\
   php7.0-opcache	\
   php7.0-memcache 	\
@@ -105,7 +99,7 @@ RUN apt-get install -y ssmtp && \
   echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
 
 # Install Apache web server.
-RUN apt-get -yqq install apache2-mpm-prefork
+RUN apt-get -yqq install apache2
 
 #
 # Step 2: Configuration
@@ -118,6 +112,7 @@ RUN phpdismod apcu opcache xdebug xhprof
 RUN rm /etc/apache2/sites-enabled/*
 
 # Configure needed apache modules and disable default site
+RUN a2dismod   mpm_event  cgi # mpm_worker enabled.
 RUN a2enmod		\
   access_compat		\
   actions		\
@@ -143,8 +138,7 @@ RUN a2enmod		\
   rewrite 		\
   setenvif 		\
   status 		\
-  ssl			\
-  && a2dismod cgi
+  ssl			
 
 # Install composer (latest version)
 RUN curl -sS https://getcomposer.org/installer | php && \
