@@ -63,11 +63,15 @@ RUN \
 RUN apt-get -yqq install \
   php7.2 		\
   php7.2-curl 		\
+  php7.2-bcmath   \
+  php7.2-bz2   \
   php7.2-dev 		\
   php7.2-gd 		\
   php7.2-dom		\
+  php7.2-imap     \
   php7.2-intl 		\
   php7.2-json 		\
+  php7.2-ldap     \
   php7.2-mbstring	\
   php7.2-mysql		\
   php7.2-xml		\
@@ -75,6 +79,8 @@ RUN apt-get -yqq install \
   php7.2-opcache	\
   libapache2-mod-php7.2
 
+#   php7.2-imagick  \
+#   php7.2-oauth    \
 #   php7.2-mcrypt 	\
 #   php7.2-uploadprogress \
 #   php7.2-ssh2		\
@@ -102,6 +108,17 @@ RUN \
   echo "extension = uploadprogress.so" >> /etc/php/7.2/mods-available/uploadprogress.ini && \
   cd .. && rm -fr pecl-php-uploadprogress
 
+# PHP imagick
+RUN \
+  apt-get -yqq install libmagickwand-dev imagemagick && \
+  git clone https://github.com/mkoppanen/imagick.git && \
+  cd imagick  && \
+  phpize7.2 && \
+  ./configure && \
+  make && make install && \
+  echo "extension = imagick.so" >> /etc/php/7.2/mods-available/imagick.ini && \
+  cd .. && rm -fr imagick
+
 # PHP Redis
 RUN \
   git clone https://github.com/phpredis/phpredis.git && \
@@ -111,6 +128,18 @@ RUN \
   make && make install && \
   echo "extension = redis.so" >> /etc/php/7.2/mods-available/redis.ini && \
   cd .. &&  rm -rf phpredis
+
+# PHP Solr
+RUN \
+  apt-get -yqq install libcurl4-gnutls-dev && \
+  ln -s /usr/include/x86_64-linux-gnu/curl /usr/local/include/curl && \
+  git clone https://github.com/php/pecl-search_engine-solr.git && \
+  cd pecl-search_engine-solr && \
+  phpize7.2 && \
+  ./configure  && \
+  make && make install && \
+  echo "extension = solr.so" >> /etc/php/7.2/mods-available/solr.ini && \
+  cd .. &&  rm -rf pecl-search_engine-solr
 
 # PHP APCu
 RUN \
@@ -158,8 +187,8 @@ RUN apt-get -yqq install apache2
 # Step 2: Configuration
 #
 
-# Enable uploadprogress and redis.
-RUN phpenmod uploadprogress redis
+# Enable uploadprogress, imagick, redis and solr.
+RUN phpenmod uploadprogress imagick redis solr
 # Disable by default apcu, opcache, xdebug and xhprof. Use docker-compose.yml to add file.
 RUN phpdismod apcu opcache xdebug xhprof
 

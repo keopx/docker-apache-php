@@ -63,14 +63,21 @@ RUN \
 RUN apt-get -yqq install \
   php7.0 		\
   php7.0-curl 		\
+  php7.0-bcmath   \
+  php7.0-bz2   \
   php7.0-dev 		\
   php7.0-gd 		\
   php7.0-dom		\
+  php7.0-imap     \
   php7.0-intl 		\
+  php7.0-imagick  \
   php7.0-json 		\
+  php7.0-ldap     \
   php7.0-mbstring	\
   php7.0-mcrypt 	\
   php7.0-mysql		\
+  php7.0-oauth    \
+  php7.0-odbc     \
   php7.0-uploadprogress \
   php7.0-ssh2		\
   php7.0-xml		\
@@ -114,8 +121,8 @@ RUN apt-get -yqq install apache2
 # Step 2: Configuration
 #
 
-# Disable by default apcu, opcache, xdebug and xhprof. Use docker-compose.yml to add file.
-RUN phpdismod apcu opcache xdebug xhprof
+# Disable by default apcu, apcu_bc, opcache, xdebug and xhprof. Use docker-compose.yml to add file.
+RUN phpdismod apcu apcu_bc opcache xdebug xhprof
 
 # Remove all sites enabled
 RUN rm /etc/apache2/sites-enabled/*

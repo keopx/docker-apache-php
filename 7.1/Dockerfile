@@ -63,14 +63,21 @@ RUN \
 RUN apt-get -yqq install \
   php7.1 		\
   php7.1-curl 		\
+  php7.1-bcmath   \
+  php7.1-bz2   \
   php7.1-dev 		\
   php7.1-gd 		\
   php7.1-dom		\
+  php7.1-imap     \
+  php7.1-imagick  \
   php7.1-intl 		\
   php7.1-json 		\
+  php7.1-ldap 		\
   php7.1-mbstring	\
   php7.1-mcrypt 	\
   php7.1-mysql		\
+  php7.1-oauth    \
+  php7.1-odbc     \
   php7.1-uploadprogress \
   php7.1-ssh2		\
   php7.1-xml		\
