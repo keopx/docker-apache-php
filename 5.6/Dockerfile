@@ -17,11 +17,10 @@ ENV TZ=Europe/Madrid
 
 # Set repositories
 RUN \
-  echo "deb http://ftp.de.debian.org/debian/ stretch main non-free contrib\n" > /etc/apt/sources.list && \
-  echo "deb-src http://ftp.de.debian.org/debian/ stretch main non-free contrib\n" >> /etc/apt/sources.list && \
-  echo "deb http://security.debian.org/ stretch/updates main contrib non-free\n" >> /etc/apt/sources.list && \
+  echo "deb http://ftp.de.debian.org/debian/ stretch main non-free contrib" > /etc/apt/sources.list && \
+  echo "deb-src http://ftp.de.debian.org/debian/ stretch main non-free contrib" >> /etc/apt/sources.list && \
+  echo "deb http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
   echo "deb-src http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
-  # Update repositories cache and distribution
   apt-get -qq update && apt-get -qqy upgrade
 
 # Install some basic tools needed for deployment
@@ -41,7 +40,9 @@ RUN apt-get -yqq install \
   openssh-client \
   git \
   bash-completion \
-  locales
+  locales \
+  libjpeg-turbo-progs libjpeg-progs \
+  pngcrush optipng
 
 # Install locale
 RUN \
@@ -56,7 +57,6 @@ RUN \
   apt-get -yqq install apt-transport-https lsb-release ca-certificates && \
   wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
   echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list && \
-  # Update repositories cache and distribution
   apt-get -qq update && apt-get -qqy upgrade
 
 # Install PHP5.6 with Xdebug (dev environment). WARNING with install php5.6-apcu.
@@ -141,30 +141,24 @@ RUN a2enmod		\
   rewrite 		\
   setenvif 		\
   status 		\
-  ssl			
+  ssl
 
-# Install composer (latest version)
+# Install composer (latest version) | prestissimo to speed up composer
 RUN curl -sS https://getcomposer.org/installer | php && \
   mv composer.phar /usr/local/bin/composer && \
-  # prestissimo to speed up composer
   composer global require "hirak/prestissimo:^0.3"
 
 ### Install DRUSH (latest stable) ###
 # Run this in your terminal to get the latest DRUSH project version:
 RUN curl http://files.drush.org/drush.phar -L -o drush.phar && \
-  # Accessing from anywhere on your system:
   mv drush.phar /usr/local/bin/drush && \
-  # Apply executable permissions on the downloaded file:
   chmod +x /usr/local/bin/drush && \
-  # Copy configuration files to user home directory:
   drush init -y
 
 ### Install DRUPAL CONSOLE (latest version) ###
 # Run this in your terminal to get the latest project version:
 RUN curl https://drupalconsole.com/installer -L -o drupal.phar && \
-  # Accessing from anywhere on your system:
   mv drupal.phar /usr/local/bin/drupal && \
-  # Apply executable permissions on the downloaded file:
   chmod +x /usr/local/bin/drupal
 
 # Bash setup.
