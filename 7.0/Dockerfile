@@ -110,6 +110,11 @@ RUN \
   echo "extension=xhprof.so" > /etc/php/7.0/mods-available/xhprof.ini && \
   echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.0/mods-available/xhprof.ini
 
+# Install manually APC
+RUN \
+  echo "extension=apcu.so" > /etc/php/7.0/mods-available/apcu_bc.ini && \
+  echo "extension=apc.so" >> /etc/php/7.0/mods-available/apcu_bc.ini
+
 # Install SMTP.
 RUN apt-get install -y ssmtp && \
   echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
@@ -120,6 +125,9 @@ RUN apt-get -yqq install apache2
 #
 # Step 2: Configuration
 #
+
+# Enable uploadprogress, imagick, redis and solr.
+RUN phpenmod uploadprogress imagick redis solr
 
 # Disable by default apcu, apcu_bc, opcache, xdebug and xhprof. Use docker-compose.yml to add file.
 RUN phpdismod apcu apcu_bc opcache xdebug xhprof
@@ -163,16 +171,15 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 
 ### Install DRUSH (latest stable) ###
 # Run this in your terminal to get the latest DRUSH project version:
-RUN curl http://files.drush.org/drush.phar -L -o drush.phar && \
-  mv drush.phar /usr/local/bin/drush && \
-  chmod +x /usr/local/bin/drush && \
-  drush init -y
+RUN composer global require drush/drush && \
+  ~/.composer/vendor/bin/drush init
 
 ### Install DRUPAL CONSOLE (latest version) ###
 # Run this in your terminal to get the latest project version:
 RUN curl https://drupalconsole.com/installer -L -o drupal.phar && \
   mv drupal.phar /usr/local/bin/drupal && \
-  chmod +x /usr/local/bin/drupal
+  chmod +x /usr/local/bin/drupal  && \
+  drupal self-update
 
 # Bash setup.
 RUN echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc && echo "alias ll='ls -lahs'" >> ~/.bashrc
