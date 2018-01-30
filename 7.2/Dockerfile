@@ -69,88 +69,34 @@ RUN apt-get -yqq install \
   php7.2-gd 		\
   php7.2-dom		\
   php7.2-imap     \
+  php7.2-imagick  \
   php7.2-intl 		\
   php7.2-json 		\
-  php7.2-ldap     \
+  php7.2-ldap 		\
   php7.2-mbstring	\
   php7.2-mysql		\
+  php7.2-oauth    \
+  php7.2-odbc     \
+  php7.2-uploadprogress \
+  php7.2-ssh2		\
   php7.2-xml		\
   php7.2-zip		\
+  php7.2-solr		\
+  php7.2-apcu		\
   php7.2-opcache	\
+  php7.2-memcache 	\
+  php7.2-memcached 	\
+  php7.2-redis		\
   libapache2-mod-php7.2
 
-#   php7.2-imagick  \
-#   php7.2-oauth    \
-#   php7.2-mcrypt 	\
-#   php7.2-uploadprogress \
-#   php7.2-ssh2		\
-#   php7.2-memcache 	\
-#   php7.2-memcached 	\
-#   php7.2-redis		\
-#   php7.2-solr		\
-#   php7.2-apcu		\
-#   php7.2-xdebug		\
-
+# php7.2-mcrypt 	\
+  
 # PHP Timezone
 RUN \
   echo $TZ | tee /etc/timezone && \
   dpkg-reconfigure --frontend noninteractive tzdata && \
   echo "date.timezone = \"$TZ\";" > /etc/php/7.2/apache2/conf.d/timezone.ini && \
   echo "date.timezone = \"$TZ\";" > /etc/php/7.2/cli/conf.d/timezone.ini
-
-# PHP uploadprogress
-RUN \
-  git clone https://github.com/php/pecl-php-uploadprogress.git && \
-  cd pecl-php-uploadprogress  && \
-  phpize7.2 && \
-  ./configure && \
-  make && make install && \
-  echo "extension = uploadprogress.so" >> /etc/php/7.2/mods-available/uploadprogress.ini && \
-  cd .. && rm -fr pecl-php-uploadprogress
-
-# PHP imagick
-RUN \
-  apt-get -yqq install libmagickwand-dev imagemagick && \
-  git clone https://github.com/mkoppanen/imagick.git && \
-  cd imagick  && \
-  phpize7.2 && \
-  ./configure && \
-  make && make install && \
-  echo "extension = imagick.so" >> /etc/php/7.2/mods-available/imagick.ini && \
-  cd .. && rm -fr imagick
-
-# PHP Redis
-RUN \
-  git clone https://github.com/phpredis/phpredis.git && \
-  cd phpredis && \
-  phpize7.2 && \
-  ./configure  && \
-  make && make install && \
-  echo "extension = redis.so" >> /etc/php/7.2/mods-available/redis.ini && \
-  cd .. &&  rm -rf phpredis
-
-# PHP Solr
-RUN \
-  apt-get -yqq install libcurl4-gnutls-dev && \
-  ln -s /usr/include/x86_64-linux-gnu/curl /usr/local/include/curl && \
-  git clone https://github.com/php/pecl-search_engine-solr.git && \
-  cd pecl-search_engine-solr && \
-  phpize7.2 && \
-  ./configure  && \
-  make && make install && \
-  echo "extension = solr.so" >> /etc/php/7.2/mods-available/solr.ini && \
-  cd .. &&  rm -rf pecl-search_engine-solr
-
-# PHP APCu
-RUN \
-  git clone https://github.com/krakjoe/apcu && \
-  cd apcu && \
-  phpize7.2 && \
-  ./configure && \
-  make && make install && \
-  echo "extension = apcu.so\n" >> /etc/php/7.2/mods-available/apcu.ini && \
-  echo 'apc.shm_size = "128M"' >> /etc/php/7.2/mods-available/apcu.ini && \
-  cd .. && rm -fr apcu
 
 # PHP xdebug
 RUN \
@@ -175,6 +121,11 @@ RUN \
   mv /usr/lib/php/20170718/phpng_xhprof.so /usr/lib/php/20170718/xhprof.so  && \
   echo "extension=xhprof.so" > /etc/php/7.2/mods-available/xhprof.ini && \
   echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.2/mods-available/xhprof.ini
+
+# Install manually APC
+RUN \
+  echo "extension=apcu.so" > /etc/php/7.2/mods-available/apcu_bc.ini && \
+  echo "extension=apc.so" >> /etc/php/7.2/mods-available/apcu_bc.ini
 
 # Install SMTP.
 RUN apt-get install -y ssmtp && \
