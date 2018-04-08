@@ -190,7 +190,7 @@ RUN useradd me && usermod -G www-data -a me
 WORKDIR /var/www
 
 # Volume for Apache2 data
-VOLUME /var/www
+# VOLUME /var/www
 
 COPY scripts/apache2-foreground /usr/bin/
 
