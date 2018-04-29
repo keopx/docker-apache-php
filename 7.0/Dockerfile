@@ -133,7 +133,7 @@ RUN phpenmod uploadprogress imagick redis solr
 RUN phpdismod apcu apcu_bc opcache xdebug xhprof
 
 # Remove all sites enabled
-RUN rm /etc/apache2/sites-enabled/*
+# RUN rm /etc/apache2/sites-enabled/*
 
 # Configure needed apache modules and disable default site
 RUN a2dismod   mpm_event  cgi # mpm_worker enabled.
