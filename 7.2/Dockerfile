@@ -87,6 +87,7 @@ RUN apt-get -yqq install \
   php7.2-memcache 	\
   php7.2-memcached 	\
   php7.2-redis		\
+  php7.2-xdebug		\
   libapache2-mod-php7.2
 
 # php7.2-mcrypt 	\
@@ -99,15 +100,15 @@ RUN \
   echo "date.timezone = \"$TZ\";" > /etc/php/7.2/cli/conf.d/timezone.ini
 
 # PHP xdebug
-RUN \
-  wget https://github.com/xdebug/xdebug/archive/master.zip && \
-  unzip master.zip && \
-  cd xdebug-master && \
-  phpize7.2 && \
-  ./configure --enable-xdebug && \
-  make && make install && \
-  echo "zend_extension=xdebug.so" >> /etc/php/7.2/mods-available/xdebug.ini && \
-  cd .. && rm -fr xdebug-master master.zip
+# RUN \
+#   wget https://github.com/xdebug/xdebug/archive/master.zip && \
+#   unzip master.zip && \
+#   cd xdebug-master && \
+#   phpize7.2 && \
+#   ./configure --enable-xdebug && \
+#   make && make install && \
+#   echo "zend_extension=xdebug.so" >> /etc/php/7.2/mods-available/xdebug.ini && \
+#   cd .. && rm -fr xdebug-master master.zip
 
 # Install manually xhprof
 RUN \
