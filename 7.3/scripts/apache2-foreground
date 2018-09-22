@@ -1,0 +1,15 @@
+#!/bin/bash
+set -eo pipefail
+# Apache gets grumpy about PID files pre-existing
+rm -f /var/run/apache2/apache2.pid
+
+if [ -n "$PHP_SENDMAIL_PATH" ]; then
+     sed -i 's@^;sendmail_path.*@'"sendmail_path = ${PHP_SENDMAIL_PATH}"'@' /etc/php/7.2/apache2/php.ini
+fi
+
+if [ -n "$PHP_SENDMAIL_DOMAIN" ]; then
+     sed -i 's@^mailhub.*@'"mailhub=${PHP_SENDMAIL_DOMAIN}"'@' /etc/ssmtp/ssmtp.conf
+fi
+
+# exec apache2 -DFOREGROUND
+source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND
