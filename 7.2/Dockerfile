@@ -15,6 +15,10 @@ ENV LOCALE es_ES.UTF-8
 # PHP Timezone
 ENV TZ=Europe/Madrid
 
+ARG UID=1000
+ARG GID=1000
+ARG UNAME=keopx
+
 # Set repositories
 RUN \
   echo "deb http://ftp.de.debian.org/debian/ stretch main non-free contrib" > /etc/apt/sources.list && \
@@ -209,8 +213,11 @@ RUN apt-get -q autoclean && \
 # Step 4: Run
 #
 
-# Create 'me' user like local machime user.
-RUN useradd me && usermod -G www-data -a me
+# Create 'keopx' user like local machime user.
+RUN \
+  groupadd -g $UID $GID ; \
+  useradd -m -u $UID -g $GID -s /bin/bash $UNAME ; \
+  usermod -aG www-data $UNAME;
 
 # Working dir
 WORKDIR /var/www
