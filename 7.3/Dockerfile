@@ -15,6 +15,9 @@ ENV LOCALE es_ES.UTF-8
 # PHP Timezone
 ENV TZ=Europe/Madrid
 
+# Default Document root.
+ENV DEFAULT_ROOT=/var/www/html
+
 ARG UID=1000
 ARG GID=1000
 ARG UNAME=keopx
@@ -216,13 +219,11 @@ RUN apt-get -q autoclean && \
 RUN \
   groupadd -g $UID $GID ; \
   useradd -m -u $UID -g $GID -s /bin/bash $UNAME ; \
-  usermod -aG www-data $UNAME;
+  usermod -aG www-data $UNAME; \
+  echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc && echo "alias ll='ls -lahs'" >> /home/$UNAME/.bashrc
 
 # Working dir
-WORKDIR /var/www
-
-# Volume for Apache2 data
-# VOLUME /var/www
+WORKDIR ${DEFAULT_ROOT}
 
 COPY scripts/apache2-foreground /usr/bin/
 
