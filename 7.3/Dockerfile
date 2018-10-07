@@ -44,6 +44,7 @@ RUN apt-get -yqq install \
   patch \
   rsync \
   vim \
+  nano \
   openssh-client \
   git \
   bash-completion \
