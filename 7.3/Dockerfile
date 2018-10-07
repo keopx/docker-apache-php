@@ -183,6 +183,12 @@ RUN a2enmod		\
   status 		\
   ssl
 
+# without the following line we get "AH00558: apache2: Could not reliably determine the server's fully qualified domain name"
+# autorise .htaccess files
+RUN \
+  echo "ServerName localhost" >> /etc/apache2/apache2.conf; \
+  sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
 # Install composer (latest version) | prestissimo to speed up composer
 RUN curl -sS https://getcomposer.org/installer | php && \
   mv composer.phar /usr/local/bin/composer && \
