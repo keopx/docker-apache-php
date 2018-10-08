@@ -3,8 +3,8 @@ set -eo pipefail
 # Apache gets grumpy about PID files pre-existing
 rm -f /var/run/apache2/apache2.pid
 
-if [ ! -d "$DEFAULT_ROOT/$WEB_ROOT" ]; then echo >&2 "[Error] Document Root Directory not exist (please create $WEB_ROOT)"; exit 1; fi
 if [ -n "$WEB_ROOT" ]; then
+   if [ ! -d "$DEFAULT_ROOT/$WEB_ROOT" ]; then echo >&2 "[Error] Document Root Directory not exist (please create $WEB_ROOT)"; exit 1; fi
      sed -ri -e 's!/var/www/html!${DEFAULT_ROOT}/${WEB_ROOT}!g' /etc/apache2/sites-available/*.conf
 fi
 

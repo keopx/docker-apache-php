@@ -3,13 +3,13 @@ set -eo pipefail
 # Apache gets grumpy about PID files pre-existing
 rm -f /var/run/apache2/apache2.pid
 
-if [ ! -d "$DEFAULT_ROOT/$WEB_ROOT" ]; then echo >&2 "[Error] Document Root Directory not exist (please create $WEB_ROOT)"; exit 1; fi
 if [ -n "$WEB_ROOT" ]; then
+   if [ ! -d "$DEFAULT_ROOT/$WEB_ROOT" ]; then echo >&2 "[Error] Document Root Directory not exist (please create $WEB_ROOT)"; exit 1; fi
      sed -ri -e 's!/var/www/html!${DEFAULT_ROOT}/${WEB_ROOT}!g' /etc/apache2/sites-available/*.conf
 fi
 
 if [ -n "$PHP_SENDMAIL_PATH" ]; then
-     sed -i 's@^;sendmail_path.*@'"sendmail_path = ${PHP_SENDMAIL_PATH}"'@' /etc/php/7.2/apache2/php.ini
+     sed -i 's@^;sendmail_path.*@'"sendmail_path = ${PHP_SENDMAIL_PATH}"'@' /etc/php/7.3/apache2/php.ini
 fi
 
 if [ -n "$PHP_SENDMAIL_DOMAIN" ]; then
