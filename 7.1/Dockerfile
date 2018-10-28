@@ -221,6 +221,9 @@ RUN \
 # Working dir
 WORKDIR ${DEFAULT_ROOT}
 
+# Configure XDEBUG
+COPY tpl/xdebug.ini /etc/php/7.1/mods-available/xdebug.ini
+
 COPY scripts/apache2-foreground /usr/bin/
 
 EXPOSE 80 443
