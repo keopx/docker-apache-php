@@ -8,6 +8,19 @@ if [ -n "$WEB_ROOT" ]; then
      sed -ri -e 's!/var/www/html!${DEFAULT_ROOT}/${WEB_ROOT}!g' /etc/apache2/sites-available/*.conf
 fi
 
+if [ ! 1 == "$XDEBUG_ENABLED" ]; then
+    # Disable Xdebug.
+    rm -f /etc/php/7.2/apache2/conf.d/20-xdebug.ini
+else
+    # Enable Xdebug.
+    ln -sf /etc/php/7.2/mods-available/xdebug.ini /etc/php/7.2/apache2/conf.d/20-xdebug.ini
+fi
+
+# Set the Xdebug remote_host to your host computer's IP address.
+if [ -n "$XDEBUG_HOST" ]; then
+     sed -i "s/xdebug\.remote_host \=.*/xdebug\.remote_host \= $XDEBUG_HOST/g" /etc/php/7.2/mods-available/xdebug.ini
+fi
+
 if [ -n "$PHP_SENDMAIL_PATH" ]; then
      sed -i 's@^;sendmail_path.*@'"sendmail_path = ${PHP_SENDMAIL_PATH}"'@' /etc/php/7.2/apache2/php.ini
 fi
