@@ -8,12 +8,18 @@ if [ -n "$WEB_ROOT" ]; then
      sed -ri -e 's!/var/www/html!${DEFAULT_ROOT}/${WEB_ROOT}!g' /etc/apache2/sites-available/*.conf
 fi
 
-if [ ! 1 == "$XDEBUG_ENABLED" ]; then
-    # Disable Xdebug.
-    rm -f /etc/php/7.3/apache2/conf.d/20-xdebug.ini
-else
-    # Enable Xdebug.
-    ln -sf /etc/php/7.3/mods-available/xdebug.ini /etc/php/7.3/apache2/conf.d/20-xdebug.ini
+xdebug='/etc/php/7.3/apache2/conf.d/20-xdebug.ini'
+if [ ! -L ${xdebug} ] && [ ! -e ${xdebug} ]; then
+  echo "enter"
+  if [ ! 1 == "$XDEBUG_ENABLED" ]; then
+      # Disable Xdebug.
+      echo "Disable"
+      rm -f /etc/php/7.3/apache2/conf.d/20-xdebug.ini
+   else
+      # Enable Xdebug.
+      echo "enable"
+      ln -sf /etc/php/7.3/mods-available/xdebug.ini /etc/php/7.3/apache2/conf.d/20-xdebug.ini
+   fi
 fi
 
 # Set the Xdebug remote_host to your host computer's IP address.
