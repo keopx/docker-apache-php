@@ -70,34 +70,36 @@ RUN \
 # Install PHP7 with Xdebug (dev environment)
 RUN apt-get -yqq install \
   php7.3 		\
-  php7.3-curl 		\
+  php7.3-apcu		\
   php7.3-bcmath   \
   php7.3-bz2   \
+  php7.3-curl 		\
   php7.3-dev 		\
   php7.3-gd 		\
   php7.3-dom		\
   php7.3-imap     \
+  php7.3-imagick  \
   php7.3-intl 		\
   php7.3-json 		\
   php7.3-ldap 		\
   php7.3-mbstring	\
   php7.3-mysql		\
   php7.3-odbc     \
-  php7.3-xml		\
-  php7.3-zip		\
   php7.3-opcache	\
+  php7.3-redis		\
+  php7.3-opcache	\
+  php7.3-xdebug   \
+  php7.3-xml		\
+  php7.3-yaml     \
+  php7.3-zip		\
   libapache2-mod-php7.3
 
-# php7.3-imagick  \
-# php7.3-oauth    \
-# php7.3-uploadprogress \
-# php7.3-ssh2		\
-# php7.3-solr		\
-# php7.3-memcache 	\
-# php7.3-memcached 	\
-# php7.3-apcu		\
-# php7.3-redis		\
-  # php7.3-mcrypt 	\
+#   php7.3-oauth    \
+#   php7.3-uploadprogress \
+#   php7.3-ssh2		\
+#   php7.3-solr		\
+#   php7.3-memcache 	\
+#   php7.3-memcached 	\
   
 # PHP Timezone
 RUN \
@@ -106,34 +108,24 @@ RUN \
   echo "date.timezone = \"$TZ\";" > /etc/php/7.3/apache2/conf.d/timezone.ini && \
   echo "date.timezone = \"$TZ\";" > /etc/php/7.3/cli/conf.d/timezone.ini
 
-# PHP xdebug
-RUN \
-  wget https://github.com/xdebug/xdebug/archive/master.zip && \
-  unzip master.zip && \
-  cd xdebug-master && \
-  phpize7.3 && \
-  ./configure --enable-xdebug && \
-  make && make install && \
-  echo "zend_extension=xdebug.so" >> /etc/php/7.3/mods-available/xdebug.ini && \
-  cd .. && rm -fr xdebug-master master.zip
 
 # Install manually xhprof
-# RUN \
-#   cd /tmp && \
-#   wget https://github.com/Yaoguais/phpng-xhprof/archive/master.zip && \
-#   unzip master.zip && \
-#   cd phpng-xhprof-master && \
-#   phpize7.3 && \
-#   ./configure --with-php-config=/usr/bin/php-config7.3 && \
-#   make && make install && \
-#   mv /usr/lib/php/20170718/phpng_xhprof.so /usr/lib/php/20170718/xhprof.so  && \
-#   echo "extension=xhprof.so" > /etc/php/7.3/mods-available/xhprof.ini && \
-#   echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.3/mods-available/xhprof.ini
+RUN \
+  cd /tmp && \
+  wget https://github.com/Yaoguais/phpng-xhprof/archive/master.zip && \
+  unzip master.zip && \
+  cd phpng-xhprof-master && \
+  phpize7.3 && \
+  ./configure --with-php-config=/usr/bin/php-config7.3 && \
+  make && make install && \
+  mv /usr/lib/php/20180731/phpng_xhprof.so /usr/lib/php/20180731/xhprof.so  && \
+  echo "extension=xhprof.so" > /etc/php/7.3/mods-available/xhprof.ini && \
+  echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.3/mods-available/xhprof.ini
 
 # Install manually APC
-# RUN \
-#   echo "extension=apcu.so" > /etc/php/7.3/mods-available/apcu_bc.ini && \
-#   echo "extension=apc.so" >> /etc/php/7.3/mods-available/apcu_bc.ini
+RUN \
+  echo "extension=apcu.so" > /etc/php/7.3/mods-available/apcu_bc.ini && \
+  echo "extension=apc.so" >> /etc/php/7.3/mods-available/apcu_bc.ini
 
 # Install SMTP.
 RUN apt-get install -y ssmtp && \
