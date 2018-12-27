@@ -3,37 +3,22 @@ set -eo pipefail
 # Apache gets grumpy about PID files pre-existing
 rm -f /var/run/apache2/apache2.pid
 
-if [ -n "$WEB_ROOT" ]; then
-   if [ ! -d "$DEFAULT_ROOT/$WEB_ROOT" ]; then echo >&2 "[Error] Document Root Directory not exist (please create $WEB_ROOT)"; exit 1; fi
-     sed -ri -e 's!/var/www/html!${DEFAULT_ROOT}/${WEB_ROOT}!g' /etc/apache2/sites-available/*.conf
-fi
+_gotpl() {
+    if [[ -f "/etc/gotpl/$1" ]]; then
+        gotpl "/etc/gotpl/$1" > "$2"
+    fi
+}
+process_templates() {
+    _gotpl "vhost.conf.tmpl" "/etc/apache2/sites-enabled/000-default.conf"
+    _gotpl "ssmtp.conf.tmpl" "/etc/ssmtp/ssmtp.conf"
+    _gotpl "docker-php.ini.tmpl" "/etc/php/5.6/apache2/conf.d/zzz-docker-php.ini"
+    if [ 1 == "$XDEBUG_ENABLED" ]; then
+        _gotpl "xdebug.ini.tmpl" "/etc/php/5.6/apache2/conf.d/20-xdebug.ini"
+    fi
+}
 
-xdebug='/etc/php/5.6/apache2/conf.d/20-xdebug.ini'
-if [ ! -L ${xdebug} ] && [ ! -e ${xdebug} ]; then
-  echo "enter"
-  if [ ! 1 == "$XDEBUG_ENABLED" ]; then
-      # Disable Xdebug.
-      echo "Disable"
-      rm -f /etc/php/5.6/apache2/conf.d/20-xdebug.ini
-   else
-      # Enable Xdebug.
-      echo "enable"
-      ln -sf /etc/php/5.6/mods-available/xdebug.ini /etc/php/5.6/apache2/conf.d/20-xdebug.ini
-   fi
-fi
-
-# Set the Xdebug remote_host to your host computer's IP address.
-if [ -n "$XDEBUG_HOST" ]; then
-     sed -i "s/xdebug\.remote_host \=.*/xdebug\.remote_host \= $XDEBUG_HOST/g" /etc/php/5.6/mods-available/xdebug.ini
-fi
-
-if [ -n "$PHP_SENDMAIL_PATH" ]; then
-     sed -i 's@^;sendmail_path.*@'"sendmail_path = ${PHP_SENDMAIL_PATH}"'@' /etc/php/5.6/apache2/php.ini
-fi
-
-if [ -n "$PHP_SENDMAIL_DOMAIN" ]; then
-     sed -i 's@^mailhub.*@'"mailhub=${PHP_SENDMAIL_DOMAIN}"'@' /etc/ssmtp/ssmtp.conf
-fi
+# Run templates.
+process_templates
 
 # exec apache2 -DFOREGROUND
 source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND

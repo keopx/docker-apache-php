@@ -1,0 +1,7 @@
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot {{ getenv "DEFAULT_ROOT" "/var/www/html" }}{{ getenv "WEB_ROOT" "" }}
+        ServerName {{ getenv "APACHE_SERVER_NAME" "localhost" }}
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>

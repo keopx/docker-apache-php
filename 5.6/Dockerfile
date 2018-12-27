@@ -12,8 +12,8 @@ ENV DEBIAN_FRONTEND noninteractive
 # Locale
 ENV LOCALE es_ES.UTF-8
 
-# PHP Timezone
-ENV TZ=Europe/Madrid
+# GOTPL
+ENV GOTPL_VER 0.1.5
 
 # Default Document root.
 ENV DEFAULT_ROOT=/var/www/html
@@ -59,6 +59,9 @@ RUN \
   dpkg-reconfigure --frontend=noninteractive locales && \
   update-locale LANG=$LOCALE
 
+RUN gotpl_url="https://github.com/wodby/gotpl/releases/download/${GOTPL_VER}/gotpl-linux-amd64-${GOTPL_VER}.tar.gz"; \
+  wget -qO- "${gotpl_url}" | tar xz -C /usr/local/bin;
+
 # Configure Sury sources
 # @see https://www.noobunbox.net/serveur/auto-hebergement/installer-php-7-1-sous-debian-et-ubuntu
 RUN \
@@ -92,13 +95,6 @@ RUN apt-get -yqq install \
   libapache2-mod-php5.6 && \
   apt-get -yqq install php5.6-apcu --no-install-recommends
 
-# PHP Timezone
-RUN \
-  echo $TZ | tee /etc/timezone && \
-  dpkg-reconfigure --frontend noninteractive tzdata && \
-  echo "date.timezone = \"$TZ\";" > /etc/php/5.6/apache2/conf.d/timezone.ini && \
-  echo "date.timezone = \"$TZ\";" > /etc/php/5.6/cli/conf.d/timezone.ini
-
 # Install manually xhprof
 RUN \
   pecl install xhprof-beta && \
@@ -111,8 +107,7 @@ RUN \
   echo "extension=apc.so" >> /etc/php/5.6/mods-available/apcu_bc.ini
 
 # Install SMTP.
-RUN apt-get install -y ssmtp && \
-  echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
+RUN apt-get install -y ssmtp
 
 # Install Apache web server.
 RUN apt-get -yqq install apache2
@@ -162,7 +157,6 @@ RUN a2enmod		\
 # without the following line we get "AH00558: apache2: Could not reliably determine the server's fully qualified domain name"
 # autorise .htaccess files
 RUN \
-  echo "ServerName localhost" >> /etc/apache2/apache2.conf; \
   sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
 # Install composer (latest version) | prestissimo to speed up composer
@@ -207,8 +201,8 @@ RUN \
 # Working dir
 WORKDIR ${DEFAULT_ROOT}
 
-# Configure XDEBUG
-COPY tpl/xdebug.ini /etc/php/5.6/mods-available/xdebug.ini
+# Configure templates
+COPY templates /etc/gotpl/
 
 COPY scripts/apache2-foreground /usr/bin/
 
