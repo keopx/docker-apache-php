@@ -11,9 +11,9 @@ _gotpl() {
 process_templates() {
     _gotpl "vhost.conf.tmpl" "/etc/apache2/sites-enabled/000-default.conf"
     _gotpl "ssmtp.conf.tmpl" "/etc/ssmtp/ssmtp.conf"
-    _gotpl "docker-php.ini.tmpl" "/etc/php/7.2/apache2/conf.d/zzz-docker-php.ini"
+    _gotpl "docker-php.ini.tmpl" "/etc/php/7.1/apache2/conf.d/zzz-docker-php.ini"
     if [ 1 == "$XDEBUG_ENABLED" ]; then
-        _gotpl "xdebug.ini.tmpl" "/etc/php/7.2/apache2/conf.d/20-xdebug.ini"
+        _gotpl "xdebug.ini.tmpl" "/etc/php/7.1/apache2/conf.d/20-xdebug.ini"
     fi
 }
 
