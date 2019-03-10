@@ -96,10 +96,10 @@ RUN apt-get -yqq install \
   apt-get -yqq install php5.6-apcu --no-install-recommends
 
 # Install manually xhprof
-RUN \
-  pecl install xhprof-beta && \
-  echo "extension=xhprof.so" > /etc/php/5.6/mods-available/xhprof.ini && \
-  echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/5.6/mods-available/xhprof.ini
+# RUN \
+#   pecl install xhprof-beta && \
+#   echo "extension=xhprof.so" > /etc/php/5.6/mods-available/xhprof.ini && \
+#   echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/5.6/mods-available/xhprof.ini
 
 # Install manually APC
 RUN \
