@@ -73,9 +73,9 @@ RUN \
 # Install PHP7 with Xdebug (dev environment)
 RUN apt-get -yqq install \
   php7.2 		\
-  php7.2-curl 		\
   php7.2-bcmath   \
   php7.2-bz2   \
+  php7.2-curl 		\
   php7.2-dev 		\
   php7.2-gd 		\
   php7.2-dom		\
@@ -86,8 +86,8 @@ RUN apt-get -yqq install \
   php7.2-ldap 		\
   php7.2-mbstring	\
   php7.2-mysql		\
-  php7.2-oauth    \
-  php7.2-odbc     \
+  php7.2-oauth		\
+  php7.2-odbc		\
   php7.2-uploadprogress \
   php7.2-ssh2		\
   php7.2-xml		\

@@ -73,7 +73,6 @@ RUN \
 # Install PHP7 with Xdebug (dev environment)
 RUN apt-get -yqq install \
   php7.3 		\
-  php7.3-apcu		\
   php7.3-bcmath   \
   php7.3-bz2   \
   php7.3-curl 		\
@@ -87,22 +86,23 @@ RUN apt-get -yqq install \
   php7.3-ldap 		\
   php7.3-mbstring	\
   php7.3-mysql		\
-  php7.3-odbc     \
+  php7.3-oauth		\
+  php7.3-odbc		\
+  php7.3-uploadprogress \
+  php7.3-ssh2		\
+  php7.3-xml		\
+  php7.3-yaml		\
+  php7.3-solr		\
+  php7.3-zip		\
+  php7.3-apcu		\
   php7.3-opcache	\
   php7.3-redis		\
   php7.3-opcache	\
+  php7.3-memcached 	\
   php7.3-xdebug   \
-  php7.3-xml		\
-  php7.3-yaml     \
-  php7.3-zip		\
   libapache2-mod-php7.3
 
-#   php7.3-oauth    \
-#   php7.3-uploadprogress \
-#   php7.3-ssh2		\
-#   php7.3-solr		\
-#   php7.3-memcache 	\
-#   php7.3-memcached 	\
+#   php7.3-memcache 	\ # No exist
 
 
 # Install manually xhprof
