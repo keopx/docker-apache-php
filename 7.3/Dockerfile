@@ -184,7 +184,10 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 ### Install DRUSH (latest stable) ###
 # Run this in your terminal to get the latest DRUSH project version:
 RUN composer global require drush/drush && \
-  ~/.composer/vendor/bin/drush init
+  ~/.composer/vendor/bin/drush init && \
+  curl -OL https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar && \
+  mv drush.phar /usr/local/bin/drush && \
+  chmod +x /usr/local/bin/drush
 
 ### Install DRUPAL CONSOLE (latest version) ###
 # Run this in your terminal to get the latest project version:
