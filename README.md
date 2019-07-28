@@ -13,7 +13,7 @@ To work correctly variables you need to update `docker-compose.yml` file with en
 Change on `.env` file:
 
 ```ini
-XDEBUB_ENABLED=1
+XDEBUG_ENABLED=1
 ```
 
 And create environment variable on  `docker-compose.yml`:
@@ -63,15 +63,15 @@ Values are based on `php.ini-development` file.
 
 | Variable                           | Conf        |
 | ---------------------------------- | ----------- |
-| [`XDEBUB_ENABLED`]                 | `1`         |
-| [`XDEBUB_REMOTE_CONNECT_BACK`]     | `1`         |
-| [`XDEBUB_REMOTE_AUTOSTART`]        | `1`         |
-| [`XDEBUB_REMOTE_ENABLE`]           | `1`         |
-| [`XDEBUB_REMOTE_PORT`]             | `9000`      |
-| [`XDEBUB_MAX_NESTING_LEVEL`]       | `500`       |
+| [`XDEBUG_ENABLED`]                 | `1`         |
+| [`XDEBUG_REMOTE_CONNECT_BACK`]     | `1`         |
+| [`XDEBUG_REMOTE_AUTOSTART`]        | `1`         |
+| [`XDEBUG_REMOTE_ENABLE`]           | `1`         |
+| [`XDEBUG_REMOTE_PORT`]             | `9000`      |
+| [`XDEBUG_MAX_NESTING_LEVEL`]       | `500`       |
 | [`XDEBUG_IDEKEY`]                  | `PHPSTORM`  |
-| [`XDEBUB_PROFILER_ENABLE_TRIGGER`] | `1`         |
-| [`XDEBUB_SHOW_ERROR_TRACE`]        | `1`         |
+| [`XDEBUG_PROFILER_ENABLE_TRIGGER`] | `1`         |
+| [`XDEBUG_SHOW_ERROR_TRACE`]        | `1`         |
 
 ### sSMTP configuration
 
@@ -128,16 +128,16 @@ xdebug.remote_host = {{ getenv "XDEBUG_HOST" "localhost" }}
 ### xdebug.ini
 
 ```ini
-xdebug.default_enable = {{ getenv "XDEBUB_ENABLED" "1" }}
-xdebug.remote_connect_back = {{ getenv "XDEBUB_REMOTE_CONNECT_BACK" "1" }}
-xdebug.remote_autostart = {{ getenv "XDEBUB_REMOTE_AUTOSTART" "1" }}
-xdebug.remote_enable = {{ getenv "XDEBUB_REMOTE_ENABLE" "1" }}
+xdebug.default_enable = {{ getenv "XDEBUG_ENABLED" "1" }}
+xdebug.remote_connect_back = {{ getenv "XDEBUG_REMOTE_CONNECT_BACK" "1" }}
+xdebug.remote_autostart = {{ getenv "XDEBUG_REMOTE_AUTOSTART" "1" }}
+xdebug.remote_enable = {{ getenv "XDEBUG_REMOTE_ENABLE" "1" }}
 xdebug.remote_host = {{ getenv "XDEBUG_HOST" "localhost" }}
-xdebug.remote_port = {{ getenv "XDEBUB_REMOTE_PORT" "9000" }}
-xdebug.max_nesting_level = {{ getenv "XDEBUB_MAX_NESTING_LEVEL" "500" }}
+xdebug.remote_port = {{ getenv "XDEBUG_REMOTE_PORT" "9000" }}
+xdebug.max_nesting_level = {{ getenv "XDEBUG_MAX_NESTING_LEVEL" "500" }}
 xdebug.idekey = {{ getenv "XDEBUG_IDEKEY" "PHPSTORM" }}
-xdebug.profiler_enable_trigger = {{ getenv "XDEBUB_PROFILER_ENABLE_TRIGGER" "1" }}
-xdebug.show_error_trace = {{ getenv "XDEBUB_SHOW_ERROR_TRACE" "1" }}
+xdebug.profiler_enable_trigger = {{ getenv "XDEBUG_PROFILER_ENABLE_TRIGGER" "1" }}
+xdebug.show_error_trace = {{ getenv "XDEBUG_SHOW_ERROR_TRACE" "1" }}
 ```
 
 ### sSMTP
