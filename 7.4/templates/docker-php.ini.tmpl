@@ -1,0 +1,32 @@
+; This file user only to override default php.ini values
+; BASIC SETTINGS: $PHP_INI_DIR/php.ini
+; PHP-FPM SETTINGS: /usr/local/etc/php-fpm.d/zz-www.conf
+; See: https://github.com/wodby/php | https://github.com/wodby/php/blob/master/7/templates/docker-php-7.2.ini.tmpl
+
+[PHP]
+expose_php = {{ getenv "PHP_EXPOSE" "On" }}
+error_reporting = {{ getenv "PHP_ERROR_REPORTING" "E_ALL" }}
+display_errors = {{ getenv "PHP_DISPLAY_ERRORS" "On" }}
+display_startup_errors = {{ getenv "PHP_DISPLAY_STARTUP_ERRORS" "On" }}
+log_errors = {{ getenv "PHP_LOG_ERRORS" "On" }}
+log_errors_max_len = {{ getenv "PHP_LOG_ERRORS_MAX_LEN" "1024" }}
+
+max_execution_time = {{ getenv "PHP_MAX_EXECUTION_TIME" "30" }}
+max_input_time = {{ getenv "PHP_MAX_INPUT_TIME" "60" }}
+max_input_vars = {{ getenv "PHP_MAX_INPUT_VARS" "2000" }}
+post_max_size = {{ getenv "PHP_POST_MAX_SIZE" "8M" }}
+upload_max_filesize = {{ getenv "PHP_UPLOAD_MAX_FILESIZE" "2M" }}
+max_file_uploads = {{ getenv "PHP_MAX_FILE_UPLOADS" "20" }}
+memory_limit = {{ getenv "PHP_MEMORY_LIMIT" "128M" }}
+
+[Date]
+date.timezone = {{ getenv "PHP_DATE_TIMEZONE" "Europe/Berlin"}}
+
+[Assertion]
+zend.assertions = {{ getenv "PHP_ZEND_ASSERTIONS" "1" }}
+
+[mail function]
+sendmail_path = {{ getenv "PHP_SENDMAIL_PATH" "/usr/sbin/ssmtp -t" }}
+
+[Xdebug]
+xdebug.remote_host = {{ getenv "XDEBUG_HOST" "localhost" }}

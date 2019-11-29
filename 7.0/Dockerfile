@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 MAINTAINER keopx <keopx@keopx.net>
 
@@ -24,19 +24,20 @@ ARG UNAME=keopx
 
 # Set repositories
 RUN \
-  echo "deb http://ftp.de.debian.org/debian/ stretch main non-free contrib" > /etc/apt/sources.list && \
-  echo "deb-src http://ftp.de.debian.org/debian/ stretch main non-free contrib" >> /etc/apt/sources.list && \
-  echo "deb http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
-  echo "deb-src http://security.debian.org/ stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
-  apt-get -qq update && apt-get -qqy upgrade
+  echo "deb http://ftp.de.debian.org/debian/ buster main non-free contrib" > /etc/apt/sources.list && \
+  echo "deb-src http://ftp.de.debian.org/debian/ buster main non-free contrib" >> /etc/apt/sources.list && \
+  echo "deb http://security.debian.org/ buster/updates main contrib non-free" >> /etc/apt/sources.list && \
+  echo "deb-src http://security.debian.org/ buster/updates main contrib non-free" >> /etc/apt/sources.list && \
+  apt-get -qq update && apt-get -qqy upgrade && apt-get -q autoclean && rm -rf /var/lib/apt/lists/*
 
 # Install some basic tools needed for deployment
-RUN apt-get -yqq install \
+RUN apt-get -qq update && \
+  apt-get -yqq install \
   apt-utils \
   build-essential \
   debconf-utils \
   debconf \
-  mysql-client \
+  default-mysql-client \
   locales \
   curl \
   wget \
@@ -50,40 +51,43 @@ RUN apt-get -yqq install \
   bash-completion \
   locales \
   libjpeg-turbo-progs libjpeg-progs \
-  pngcrush optipng
+  pngcrush optipng \
+  && apt-get -q autoclean && rm -rf /var/lib/apt/lists/*
 
 # Install locale
-RUN \
+RUN apt-get -qq update && \
   sed -i -e "s/# $LOCALE/$LOCALE/" /etc/locale.gen && \
   echo "LANG=$LOCALE">/etc/default/locale && \
   dpkg-reconfigure --frontend=noninteractive locales && \
-  update-locale LANG=$LOCALE
+  update-locale LANG=$LOCALE && \
+  apt-get -q autoclean && rm -rf /var/lib/apt/lists/*
 
 RUN gotpl_url="https://github.com/wodby/gotpl/releases/download/${GOTPL_VER}/gotpl-linux-amd64-${GOTPL_VER}.tar.gz"; \
   wget -qO- "${gotpl_url}" | tar xz -C /usr/local/bin;
 
 # Configure Sury sources
 # @see https://www.noobunbox.net/serveur/auto-hebergement/installer-php-7-1-sous-debian-et-ubuntu
-RUN \
+RUN apt-get -qq update && \
   apt-get -yqq install apt-transport-https lsb-release ca-certificates && \
   wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
   echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list && \
-  apt-get -qq update && apt-get -qqy upgrade
+  apt-get -qq update && apt-get -qqy upgrade && apt-get -q autoclean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP7 with Xdebug (dev environment)
-RUN apt-get -yqq install \
+RUN apt-get -qq update && \
+  apt-get -yqq install \
   php7.0 		\
-  php7.0-curl 		\
   php7.0-bcmath   \
   php7.0-bz2   \
+  php7.0-curl 		\
   php7.0-dev 		\
   php7.0-gd 		\
   php7.0-dom		\
   php7.0-imap     \
-  php7.0-intl 		\
   php7.0-imagick  \
+  php7.0-intl 		\
   php7.0-json 		\
-  php7.0-ldap     \
+  php7.0-ldap 		\
   php7.0-mbstring	\
   php7.0-mcrypt 	\
   php7.0-mysql		\
@@ -92,15 +96,17 @@ RUN apt-get -yqq install \
   php7.0-uploadprogress \
   php7.0-ssh2		\
   php7.0-xml		\
+  php7.0-yaml		\
   php7.0-zip		\
   php7.0-solr		\
   php7.0-apcu		\
   php7.0-opcache	\
+  php7.0-redis		\
   php7.0-memcache 	\
   php7.0-memcached 	\
-  php7.0-redis		\
   php7.0-xdebug		\
-  libapache2-mod-php7.0
+  libapache2-mod-php7.0 \
+  && apt-get -q autoclean && rm -rf /var/lib/apt/lists/*
 
 # Install manually xhprof
 RUN \
@@ -120,10 +126,16 @@ RUN \
   echo "extension=apc.so" >> /etc/php/7.0/mods-available/apcu_bc.ini
 
 # Install SMTP.
-RUN apt-get install -y ssmtp
+RUN apt-get -qq update && \
+  apt-get -yqq install libgnutls-openssl27 && \
+  wget ftp.de.debian.org/debian/pool/main/s/ssmtp/ssmtp_2.64-8.1+b1_amd64.deb && \
+  apt-get -q autoclean && rm -rf /var/lib/apt/lists/* && \
+  dpkg -i ssmtp_2.64-8.1+b1_amd64.deb
 
 # Install Apache web server.
-RUN apt-get -yqq install apache2
+RUN apt-get -qq update && \
+  apt-get -yqq install apache2 && \
+  apt-get -q autoclean && rm -rf /var/lib/apt/lists/*
 
 #
 # Step 2: Configuration
