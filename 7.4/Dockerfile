@@ -90,14 +90,14 @@ RUN apt-get -qq update && \
   php7.4-ldap 		\
   php7.4-mbstring	\
   php7.4-mysql		\
-#  php7.4-oauth		\
+  php7.4-oauth		\
   php7.4-odbc		\
   php7.4-uploadprogress \
   php7.4-ssh2		\
   php7.4-xml		\
   php7.4-yaml		\
   php7.4-zip		\
-#  php7.4-solr		\
+  php7.4-solr		\
   php7.4-apcu		\
   php7.4-opcache	\
   php7.4-redis		\
@@ -105,8 +105,6 @@ RUN apt-get -qq update && \
   php7.4-memcached 	\
   php7.4-xdebug		\
   libapache2-mod-php7.4 \
-  php-oauth		\
-  php-solr		\
   && apt-get -q autoclean && rm -rf /var/lib/apt/lists/*
 
 # Install manually xhprof
