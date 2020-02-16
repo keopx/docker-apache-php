@@ -38,26 +38,26 @@ The default configuration is __not recommended to be used for production__ envir
 
 Values are based on `php.ini-development` file.
 
-| Variable                        | 7.3                  | 7.2                  | 7.1                  | 7.0                  | 5.6                  |
-| ------------------------------- | -------------------- | -------------------- | -------------------- | -------------------- | -------------------- |
-| [`PHP_DATE_TIMEZONE`]           | `Europe/Berlin`      | `Europe/Berlin`      | `Europe/Berlin`      | `Europe/Berlin`      | `Europe/Berlin`      |
-| [`PHP_DISPLAY_ERRORS`]          | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 |
-| [`PHP_DISPLAY_STARTUP_ERRORS`]  | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 |
-| [`PHP_ERROR_REPORTING`]         | `E_ALL`              | `E_ALL`              | `E_ALL`              | `E_ALL`              | `E_ALL`              |
-| [`PHP_EXPOSE`]                  | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 |
-| [`PHP_LOG_ERRORS`]              | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 |
-| [`PHP_LOG_ERRORS_MAX_LEN`]      | `1024`               | `1024`               | `1024`               | `1024`               | `1024`               |
-| [`PHP_MAX_EXECUTION_TIME`]      | `30`                 | `30`                 | `30`                 | `30`                 | `30`                 |
-| [`PHP_MAX_FILE_UPLOADS`]        | `20`                 | `20`                 | `20`                 | `20`                 | `20`                 |
-| [`PHP_MAX_INPUT_TIME`]          | `60`                 | `60`                 | `60`                 | `60`                 | `60`                 |
-| [`PHP_MAX_INPUT_VARS`]          | `2000`               | `2000`               | `2000`               | `2000`               | `2000`               |
-| [`PHP_MEMORY_LIMIT`]            | `128M`               | `128M`               | `128M`               | `128M`               | `128M`               |
-| [`PHP_POST_MAX_SIZE`]           | `8M`                 | `8M`                 | `8M`                 | `8M`                 | `8M`                 |
-| [`PHP_SENDMAIL_PATH`]           | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` |
-| [`PHP_TRACK_ERRORS`]            | -                    | -                    | `On`                 | `On`                 | `On`                 |
-| [`PHP_UPLOAD_MAX_FILESIZE`]     | `2M`                 | `2M`                 | `2M`                 | `2M`                 | `2M`                 |
-| [`PHP_ZEND_ASSERTIONS`]         | `1`                  | `1`                  | `1`                  | `1`                  | `1`                  |
-| [`XDEBUG_HOST`]                 | `localhost`          | `localhost`          | `localhost`          | `localhost`          | `localhost`          |
+| Variable                        | 7.4                  | 7.3                  | 7.2                  | 7.1                  | 7.0                  | 5.6                  |
+| ------------------------------- | -------------------- | -------------------- | -------------------- | -------------------- | -------------------- | -------------------- |
+| [`PHP_DATE_TIMEZONE`]           | `Europe/Berlin`      | `Europe/Berlin`      | `Europe/Berlin`      | `Europe/Berlin`      | `Europe/Berlin`      | `Europe/Berlin`      |
+| [`PHP_DISPLAY_ERRORS`]          | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 |
+| [`PHP_DISPLAY_STARTUP_ERRORS`]  | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 |
+| [`PHP_ERROR_REPORTING`]         | `E_ALL`              | `E_ALL`              | `E_ALL`              | `E_ALL`              | `E_ALL`              | `E_ALL`              |
+| [`PHP_EXPOSE`]                  | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 |
+| [`PHP_LOG_ERRORS`]              | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 | `On`                 |
+| [`PHP_LOG_ERRORS_MAX_LEN`]      | `1024`               | `1024`               | `1024`               | `1024`               | `1024`               | `1024`               |
+| [`PHP_MAX_EXECUTION_TIME`]      | `30`                 | `30`                 | `30`                 | `30`                 | `30`                 | `30`                 |
+| [`PHP_MAX_FILE_UPLOADS`]        | `20`                 | `20`                 | `20`                 | `20`                 | `20`                 | `20`                 |
+| [`PHP_MAX_INPUT_TIME`]          | `60`                 | `60`                 | `60`                 | `60`                 | `60`                 | `60`                 |
+| [`PHP_MAX_INPUT_VARS`]          | `2000`               | `2000`               | `2000`               | `2000`               | `2000`               | `2000`               |
+| [`PHP_MEMORY_LIMIT`]            | `128M`               | `128M`               | `128M`               | `128M`               | `128M`               | `128M`               |
+| [`PHP_POST_MAX_SIZE`]           | `8M`                 | `8M`                 | `8M`                 | `8M`                 | `8M`                 | `8M`                 |
+| [`PHP_SENDMAIL_PATH`]           | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` | `/usr/sbin/ssmtp -t` |
+| [`PHP_TRACK_ERRORS`]            | -                    | -                    | -                    | `On`                 | `On`                 | `On`                 |
+| [`PHP_UPLOAD_MAX_FILESIZE`]     | `2M`                 | `2M`                 | `2M`                 | `2M`                 | `2M`                 | `2M`                 |
+| [`PHP_ZEND_ASSERTIONS`]         | `1`                  | `1`                  | `1`                  | `1`                  | `1`                  | `1`                  |
+| [`XDEBUG_HOST`]                 | `localhost`          | `localhost`          | `localhost`          | `localhost`          | `localhost`          | `localhost`          |
 
 ### PHP XDEBUG configuration
 
