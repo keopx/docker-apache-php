@@ -6,21 +6,14 @@ MAINTAINER keopx <keopx@keopx.net>
 # Step 1: Installation
 #
 
-# Set frontend. We'll clean this later on!
-ENV DEBIAN_FRONTEND noninteractive
-
-# Locale
-ENV LOCALE es_ES.UTF-8
-
-# GOTPL
-ENV GOTPL_VER 0.1.5
-
-# Default Document root.
-ENV DEFAULT_ROOT=/var/www/html
-
-ARG UID=1000
-ARG GID=1000
-ARG UNAME=keopx
+# System environments
+ENV DEBIAN_FRONTEND="noninteractive" \
+    LOCALE="es_ES.UTF-8" \
+    GOTPL_VER="0.1.5" \
+    DEFAULT_ROOT="/var/www/html" \
+    UID="1000" \
+    GID="1000" \
+    UNAME="keopx"
 
 # Set repositories
 RUN \
@@ -187,7 +180,7 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 ### Install DRUSH (latest stable) ###
 # Run this in your terminal to get the latest DRUSH project version:
 RUN composer global require drush/drush && \
-  ~/.composer/vendor/bin/drush init && \
+  ~/.composer/vendor/bin/drush init -y && \
   curl -OL https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar && \
   mv drush.phar /usr/local/bin/drush && \
   chmod +x /usr/local/bin/drush
