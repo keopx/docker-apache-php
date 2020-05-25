@@ -115,10 +115,8 @@ RUN \
 
 # Install SMTP.
 RUN apt-get -qq update && \
-  apt-get -yqq install libgnutls-openssl27 && \
-  wget ftp.de.debian.org/debian/pool/main/s/ssmtp/ssmtp_2.64-8.1+b1_amd64.deb && \
-  apt-get -q autoclean && rm -rf /var/lib/apt/lists/* && \
-  dpkg -i ssmtp_2.64-8.1+b1_amd64.deb
+  apt-get -yqq install libgnutls-openssl27 ssmtp && \
+  apt-get -q autoclean && rm -rf /var/lib/apt/lists/*
 
 # Install Apache web server.
 RUN apt-get -qq update && \
