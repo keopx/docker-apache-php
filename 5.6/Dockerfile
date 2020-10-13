@@ -157,10 +157,10 @@ RUN \
   chmod +x /usr/local/bin/drush && \
 ### Install DRUPAL CONSOLE (latest version) ###
 # Run this in your terminal to get the latest project version:
-  curl https://drupalconsole.com/installer -L -o drupal.phar && \
-  mv drupal.phar /usr/local/bin/drupal && \
-  chmod +x /usr/local/bin/drupal  && \
-  drupal self-update && \
+#   curl https://drupalconsole.com/installer -L -o drupal.phar && \
+#   mv drupal.phar /usr/local/bin/drupal && \
+#   chmod +x /usr/local/bin/drupal  && \
+#   drupal self-update && \
 # Bash setup.
   echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc && echo "alias ll='ls -lahs'" >> ~/.bashrc && \
 #
