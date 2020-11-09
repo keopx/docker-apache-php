@@ -151,8 +151,10 @@ RUN \
 # autorise .htaccess files
   sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf && \
 # Install composer (latest version) | prestissimo to speed up composer
-  curl -sS https://getcomposer.org/installer | php && \
+  php -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"  && \
+  php composer.phar  && \
   mv composer.phar /usr/local/bin/composer && \
+  chmod 755 /usr/local/bin/composer && \
   composer global require "hirak/prestissimo:^0.3" && \
 ### Install DRUSH (latest stable) ###
 # Run this in your terminal to get the latest DRUSH project version:
