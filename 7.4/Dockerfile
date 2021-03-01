@@ -99,10 +99,6 @@ RUN \
   mv /usr/lib/php/20190902/phpng_xhprof.so /usr/lib/php/20190902/xhprof.so  && \
   echo "extension=xhprof.so" > /etc/php/7.4/mods-available/xhprof.ini && \
   echo "xhprof.output_dir=/var/www/xhprof" >> /etc/php/7.4/mods-available/xhprof.ini && \
-
-# Install manually APC
-  echo "extension=apcu.so" > /etc/php/7.2/mods-available/apcu_bc.ini && \
-  echo "extension=apc.so" >> /etc/php/7.2/mods-available/apcu_bc.ini && \
 # Install SMTP.
   apt-get -yqq install libgnutls-openssl27 && \
   wget ftp.de.debian.org/debian/pool/main/s/ssmtp/ssmtp_2.64-8+b2_amd64.deb && \
