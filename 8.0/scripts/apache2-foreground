@@ -1,0 +1,24 @@
+#!/bin/bash
+set -eo pipefail
+# Apache gets grumpy about PID files pre-existing
+rm -f /var/run/apache2/apache2.pid
+
+_gotpl() {
+    if [[ -f "/etc/gotpl/$1" ]]; then
+        gotpl "/etc/gotpl/$1" > "$2"
+    fi
+}
+process_templates() {
+    _gotpl "vhost.conf.tmpl" "/etc/apache2/sites-enabled/000-default.conf"
+    _gotpl "ssmtp.conf.tmpl" "/etc/ssmtp/ssmtp.conf"
+    _gotpl "docker-php.ini.tmpl" "/etc/php/8.0/apache2/conf.d/zzz-docker-php.ini"
+    if [ 1 == "$XDEBUG_ENABLED" ]; then
+        _gotpl "xdebug.ini.tmpl" "/etc/php/8.0/apache2/conf.d/20-xdebug.ini"
+    fi
+}
+
+# Run templates.
+process_templates
+
+# exec apache2 -DFOREGROUND
+source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND
