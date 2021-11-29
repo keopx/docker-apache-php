@@ -112,9 +112,9 @@ RUN \
   phpenmod uploadprogress imagick redis solr && \
 # Disable by default apcu, apcu_bc, opcache, xdebug and xhprof. Use docker-compose.yml to add file.
   phpdismod apcu apcu_bc opcache xdebug xhprof && \
-# Remove all sites enabled
+# Remove all sites enabled.
 # RUN rm /etc/apache2/sites-enabled/*
-# Configure needed apache modules and disable default site
+# Configure needed apache modules and disable default site.
 # mpm_worker enabled.
   a2dismod mpm_event cgi && \
   a2enmod		\
