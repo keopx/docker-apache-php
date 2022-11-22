@@ -146,24 +146,17 @@ RUN \
 # autorise .htaccess files
   sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf && \
 # Install composer (latest version) | prestissimo to speed up composer
-  php -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"  && \
+  php -r "copy('https://getcomposer.org/composer.phar', 'composer.phar');"  && \
   php composer.phar  && \
   mv composer.phar /usr/local/bin/composer && \
   chmod 755 /usr/local/bin/composer && \
-  composer global require "hirak/prestissimo:^0.3" && \
 ### Install DRUSH (latest stable) ###
 # Run this in your terminal to get the latest DRUSH project version:
   composer global require drush/drush && \
-  ~/.composer/vendor/bin/drush init -y && \
+  composer global require symfony/http-kernel -W  && \
   curl -OL https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar && \
   mv drush.phar /usr/local/bin/drush && \
   chmod +x /usr/local/bin/drush && \
-### Install DRUPAL CONSOLE (latest version) ###
-# Run this in your terminal to get the latest project version:
-#   curl https://drupalconsole.com/installer -L -o drupal.phar && \
-#   mv drupal.phar /usr/local/bin/drupal && \
-#   chmod +x /usr/local/bin/drupal  && \
-#   drupal self-update && \
 # Bash setup.
   echo ". /usr/share/bash-completion/bash_completion" >> ~/.bashrc && echo "alias ll='ls -lahs'" >> ~/.bashrc && \
 #
